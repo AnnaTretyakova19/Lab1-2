@@ -139,10 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="LAB4.cpp" />
+    <ClCompile Include="LAB1.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="normal.h" />
+    <ClInclude Include="longHex.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
