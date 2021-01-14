@@ -86,7 +86,7 @@ int main()
 	time = benchmark<1>();
 	//assert(temp == n1);
 	temp.print();
-	cout << "\n" << "Time: " << time << "\n\n";
+	cout << "\n" << "  Time: " << time << "\n\n";
 
 	cout << "n ^ n1 : ";
 	benchmark<1>();
@@ -97,7 +97,6 @@ int main()
 
 	cout << "length: " << string(temp).size()  << "Time: " << time << "\n";
 		
-
 	longHex
 		x = (a + b) * n,
 		y = b * n + n * a;
@@ -201,8 +200,8 @@ int main()
 
 	x = longHex("8f");
 	y = longHex("99C6");
-	z = longHex("E6A");
-	cout << "a^(2 ^(k-1))%(3^k) = " << "\n";
+	z = longHex("1CD52");
+	cout << "a^(2*3^(k-1))%(3^k) = " << "\n";
 	longHex::pow(x, y, z).print();
 
 

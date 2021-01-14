@@ -264,6 +264,7 @@ public:
         *this = res;*/
         return *this;
     }
+
     longHex operator * (const longHex& b) const
     {
         return longHex(*this) *= b;
@@ -323,10 +324,24 @@ public:
         return a / gcd(a, b) * b;
     }
 
+   /* static longHex pow(const longHex& a, const longHex& b, const longHex& m)
+    {
+        static const longHex one = longHex("1"), two = longHex("2");
+        if (b.intlong[0] == 0 && b.length <= 1) {
+            return one;
+        }
+        longHex res = pow(a, b / two);
+        if (b.intlong[0] % 2 == 0) {
+            return (res * res) % m;
+        }
+        else {
+            return (((res * res) % m) * a) % m;
+        }
+    }*/
     static longHex pow(const longHex& a, const longHex& b, const longHex& m)
     {
         longHex res = longHex("1");
-        for (int i = b.length * 4; i >= 0; --i) {
+        for (int i = b.length * 32; i >= 0; --i) {
             if (b.getbit(i) == 1) {
                 res = ((res * res % m) * a) % m;
             }
