@@ -12,8 +12,9 @@ private:
 
     typedef unsigned long long data_t;
 
-    static const int SIZE = 4096;
+    static const int SIZE = 8192;
     data_t* intlong;
+    int length = 1;
 
     static int getint(char c)
     {
@@ -58,7 +59,7 @@ private:
             return;
         }
         if (len > 0) {
-            
+
             for (int i = min(length, SIZE - 1); i > 0; --i) {
                 intlong[i] = ((intlong[i] << len) | (intlong[i - 1] >> (32 - len))) & UINT_MAX;
             }
@@ -116,7 +117,7 @@ private:
             throw "overflow";
         }
     }
-    
+
     bool isnull() const {
         return length == 1 && intlong[0] == 0;
     }
@@ -125,10 +126,10 @@ private:
         return intlong[SIZE - 1] >> 32ULL != 0;
     }
 
-   
+
 
 public:
-    int length = 1;
+    
     bool getbit(int n) const
     {
         return (intlong[n / 32] >> (n % 32ULL)) & 1ULL;
@@ -141,14 +142,14 @@ public:
             intlong[n / 32] &= ~((data_t)v << ((data_t)n % 32ULL));
         }
     }
-   
+
     static data_t f(data_t x) {
         return x ? 1 + f(x >> 1) : 0;
     }
-
     int highbit() const {
         return (length - 1) * 32 + f(intlong[length - 1]) - 1;
     }
+
     void shift(int _shift) {
         int tmp = _shift < 0 ? -1 : 1;
         local_shift(tmp * (abs(_shift) % 32));
@@ -250,18 +251,7 @@ public:
                 *this += temp;
             }
             temp += temp;
-        }
-        /*longHex res;
-        for (int i = 0; i < length; ++i) {
-            longHex temp = b;
-            for (int j = 0; j < temp.length; ++j) {
-                assert(ULLONG_MAX / intlong[i] >= temp.intlong[j]);
-                temp.intlong[j] *= intlong[i];
-            }
-            temp.global_shift(i, true);
-            res += temp;
-        }
-        *this = res;*/
+        }        
         return *this;
     }
 
@@ -272,8 +262,8 @@ public:
 
     bool operator > (const longHex& b) const
     {
-        if (length > b.length) { 
-            return true; 
+        if (length > b.length) {
+            return true;
         };
         for (int i = SIZE - 1; i >= 0; --i) {
             if (intlong[i] != b.intlong[i]) {
@@ -283,7 +273,7 @@ public:
         return false;
     }
     bool operator == (const longHex& b) const {
-        return !(b > *this) && !(*this > b);
+        return !(b > * this) && !(*this > b);
     }
     bool operator < (const longHex& b) const {
         return !(*this > b) && !(*this == b);
@@ -297,7 +287,8 @@ public:
     {
         return submod(b, 0);
     }
-
+    
+    
     static longHex pow(const longHex& a, const longHex& b)
     {
         static const longHex one = longHex("1"), two = longHex("2");
@@ -313,9 +304,14 @@ public:
         }
     }
 
+
+
+
+
+
+
     static longHex gcd(const longHex& a, const longHex& b)
     {
-
         return (b.intlong[0] == 0 && b.length <= 1) ? a : gcd(b, a % b);
     }
 
@@ -324,21 +320,7 @@ public:
         return a / gcd(a, b) * b;
     }
 
-   /* static longHex pow(const longHex& a, const longHex& b, const longHex& m)
-    {
-        static const longHex one = longHex("1"), two = longHex("2");
-        if (b.intlong[0] == 0 && b.length <= 1) {
-            return one;
-        }
-        longHex res = pow(a, b / two);
-        if (b.intlong[0] % 2 == 0) {
-            return (res * res) % m;
-        }
-        else {
-            return (((res * res) % m) * a) % m;
-        }
-    }*/
-    static longHex pow(const longHex& a, const longHex& b, const longHex& m)
+    static longHex powm(const longHex& a, const longHex& b, const longHex& m)
     {
         longHex res = longHex("1");
         for (int i = b.length * 32; i >= 0; --i) {
